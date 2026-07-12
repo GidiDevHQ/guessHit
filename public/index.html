@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guess Hit</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      max-width: 800px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    .header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .lobby-screen, .game-screen {
+      padding: 20px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: #e0e0e0;
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      background: #dc2626;
+    }
+
+    .info-box {
+      background: #f9fafb;
+      border-left: 4px solid #667eea;
+      padding: 12px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+
+    .info-box.success {
+      border-left-color: #10b981;
+      background: #f0fdf4;
+    }
+
+    .info-box.error {
+      border-left-color: #ef4444;
+      background: #fef2f2;
+      color: #dc2626;
+    }
+
+    .info-box.warning {
+      border-left-color: #f59e0b;
+      background: #fffbeb;
+    }
+
+    .players-list {
+      background: #f9fafb;
+      border-radius: 6px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .players-list h3 {
+      margin-bottom: 10px;
+      color: #333;
+      font-size: 16px;
+    }
+
+    .player-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background: white;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      border: 2px solid transparent;
+    }
+
+    .player-item.master {
+      border-color: #667eea;
+      background: #eef2ff;
+    }
+
+    .player-name {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .player-score {
+      background: #667eea;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .master-badge {
+      background: #fbbf24;
+      color: #78350f;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+
+    .chat-area {
+      background: #f9fafb;
+      border-radius: 6px;
+      padding: 15px;
+      margin: 15px 0;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .chat-message {
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      background: white;
+      border-left: 3px solid #667eea;
+    }
+
+    .chat-message.system {
+      border-left-color: #10b981;
+      background: #f0fdf4;
+      font-style: italic;
+    }
+
+    .chat-message.error {
+      border-left-color: #ef4444;
+      background: #fef2f2;
+      color: #dc2626;
+    }
+
+    .chat-message.winner {
+      border-left-color: #fbbf24;
+      background: #fffbeb;
+      font-weight: 600;
+    }
+
+    .game-question {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    .game-question h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .game-question p {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .timer {
+      background: #fbbf24;
+      color: #78350f;
+      padding: 8px 16px;
+      border-radius: 20px;
+      display: inline-block;
+      font-weight: 600;
+      margin: 10px 0;
+    }
+
+    .attempts-left {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      margin: 10px 0;
+    }
+
+    .attempts-left.low {
+      color: #ef4444;
+      font-weight: 600;
+    }
+
+    .session-code {
+      background: #f3f4f6;
+      padding: 15px;
+      border-radius: 6px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .session-code h3 {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+
+    .session-code .code {
+      font-size: 32px;
+      font-weight: 700;
+      color: #667eea;
+      letter-spacing: 4px;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎯 Guess Hit</h1>
+      <p id="statusText">Connecting to server...</p>
+    </div>
+
+    <!-- Initial Screen -->
+    <div id="initialScreen" class="lobby-screen">
+      <div class="input-group">
+        <label for="playerName">Your Name</label>
+        <input type="text" id="playerName" placeholder="Enter your name" />
+      </div>
+      <div class="button-group">
+        <button class="btn-primary" onclick="createSession()">Create New Game</button>
+      </div>
+      <div style="text-align: center; margin: 15px 0; color: #999;">OR</div>
+      <div class="input-group">
+        <label for="sessionIdInput">Join Existing Game</label>
+        <input type="text" id="sessionIdInput" placeholder="Enter game code" style="text-transform: uppercase;" />
+      </div>
+      <div class="button-group">
+        <button class="btn-primary" onclick="joinSession()">Join Game</button>
+      </div>
+      <div id="errorMessage" class="info-box error hidden"></div>
+    </div>
+
+    <!-- Lobby Screen -->
+    <div id="lobbyScreen" class="lobby-screen hidden">
+      <div class="session-code">
+        <h3>Game Code</h3>
+        <div class="code" id="sessionCode">----</div>
+      </div>
+
+      <div class="players-list">
+        <h3>Players (<span id="playerCount">0</span>)</h3>
+        <div id="playersList"></div>
+      </div>
+
+      <div id="lobbyMessages" class="chat-area"></div>
+
+      <!-- Game Master Controls -->
+      <div id="masterControls" class="hidden">
+        <div class="info-box warning">
+          <strong>You are the Game Master!</strong> Set a question and start the game when ready.
+        </div>
+        <div class="input-group">
+          <label for="questionInput">Question</label>
+          <input type="text" id="questionInput" placeholder="What is the capital of France?" />
+        </div>
+        <div class="input-group">
+          <label for="answerInput">Answer</label>
+          <input type="text" id="answerInput" placeholder="Paris" />
+        </div>
+        <div class="button-group">
+          <button class="btn-primary" onclick="startGame()">Start Game</button>
+          <button class="btn-danger" onclick="leaveSession()">Leave Game</button>
+        </div>
+      </div>
+
+      <!-- Player Waiting -->
+      <div id="playerWaiting" class="hidden">
+        <div class="info-box">
+          Waiting for <strong id="masterName"></strong> to start the game...
+        </div>
+        <div class="button-group">
+          <button class="btn-danger" onclick="leaveSession()">Leave Game</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="gameScreen" class="game-screen hidden">
+      <div class="session-code">
+        <h3>Game Code</h3>
+        <div class="code" id="gameSessionCode">----</div>
+      </div>
+
+      <div class="game-question">
+        <h3>Question</h3>
+        <p id="gameQuestion">Loading...</p>
+        <div class="timer">⏱️ <span id="timeRemaining">60</span>s</div>
+      </div>
+
+      <div class="players-list">
+        <h3>Players & Scores</h3>
+        <div id="gamePlayersList"></div>
+      </div>
+
+      <div id="gameMessages" class="chat-area"></div>
+
+      <!-- Game Master View -->
+      <div id="masterView" class="hidden">
+        <div class="info-box">
+          <strong>You are the Game Master!</strong> Watch as players try to guess your answer.
+        </div>
+      </div>
+
+      <!-- Player Input -->
+      <div id="playerInput" class="hidden">
+        <div class="attempts-left" id="attemptsDisplay">Attempts left: 3</div>
+        <div class="input-group">
+          <label for="guessInput">Your Guess</label>
+          <input type="text" id="guessInput" placeholder="Enter your answer" />
+        </div>
+        <div class="button-group">
+          <button class="btn-primary" onclick="submitGuess()">Submit Guess</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    let currentSession = null;
+    let myPlayerId = null;
+    let gameTimer = null;
+
+    // Screen management
+    function showScreen(screenId) {
+      document.querySelectorAll('.lobby-screen, .game-screen').forEach(el => {
+        el.classList.add('hidden');
+      });
+      document.getElementById(screenId).classList.remove('hidden');
+    }
+
+    function showError(message) {
+      const errorEl = document.getElementById('errorMessage');
+      errorEl.textContent = message;
+      errorEl.classList.remove('hidden');
+      setTimeout(() => errorEl.classList.add('hidden'), 5000);
+    }
+
+    function addLobbyMessage(message, type = 'system') {
+      const messagesEl = document.getElementById('lobbyMessages');
+      const msgEl = document.createElement('div');
+      msgEl.className = `chat-message ${type}`;
+      msgEl.textContent = message;
+      messagesEl.appendChild(msgEl);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function addGameMessage(message, type = 'system') {
+      const messagesEl = document.getElementById('gameMessages');
+      const msgEl = document.createElement('div');
+      msgEl.className = `chat-message ${type}`;
+      msgEl.textContent = message;
+      messagesEl.appendChild(msgEl);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function updatePlayersList(players, masterId, inGame = false) {
+      const listEl = document.getElementById(inGame ? 'gamePlayersList' : 'playersList');
+      listEl.innerHTML = '';
+      
+      players.forEach(player => {
+        const isMaster = player.id === masterId;
+        const isMe = player.id === myPlayerId;
+        
+        const playerEl = document.createElement('div');
+        playerEl.className = `player-item ${isMaster ? 'master' : ''}`;
+        
+        const nameEl = document.createElement('span');
+        nameEl.className = 'player-name';
+        nameEl.textContent = isMe ? `${player.name} (You)` : player.name;
+        
+        if (isMaster) {
+          const badge = document.createElement('span');
+          badge.className = 'master-badge';
+          badge.textContent = '👑 Game Master';
+          nameEl.appendChild(badge);
+        }
+        
+        const scoreEl = document.createElement('span');
+        scoreEl.className = 'player-score';
+        scoreEl.textContent = `${player.score} pts`;
+        
+        playerEl.appendChild(nameEl);
+        playerEl.appendChild(scoreEl);
+        listEl.appendChild(playerEl);
+      });
+
+      document.getElementById('playerCount').textContent = players.length;
+    }
+
+    // Session actions
+    function createSession() {
+      const name = document.getElementById('playerName').value.trim();
+      if (!name) {
+        showError('Please enter your name');
+        return;
+      }
+
+      socket.emit('createSession', { name }, (response) => {
+        if (response.success) {
+          currentSession = response.session;
+          myPlayerId = socket.id;
+          showLobby();
+        } else {
+          showError(response.error);
+        }
+      });
+    }
+
+    function joinSession() {
+      const name = document.getElementById('playerName').value.trim();
+      const sessionId = document.getElementById('sessionIdInput').value.trim().toUpperCase();
+      
+      if (!name) {
+        showError('Please enter your name');
+        return;
+      }
+      
+      if (!sessionId) {
+        showError('Please enter a game code');
+        return;
+      }
+
+      socket.emit('joinSession', { sessionId, name }, (response) => {
+        if (response.success) {
+          currentSession = response.session;
+          myPlayerId = socket.id;
+          showLobby();
+        } else {
+          showError(response.error);
+        }
+      });
+    }
+
+    function showLobby() {
+      showScreen('lobbyScreen');
+      document.getElementById('sessionCode').textContent = currentSession.sessionId;
+      
+      const isMaster = currentSession.players[currentSession.masterIndex].id === myPlayerId;
+      
+      if (isMaster) {
+        document.getElementById('masterControls').classList.remove('hidden');
+        document.getElementById('playerWaiting').classList.add('hidden');
+      } else {
+        document.getElementById('masterControls').classList.add('hidden');
+        document.getElementById('playerWaiting').classList.remove('hidden');
+        document.getElementById('masterName').textContent = currentSession.players[currentSession.masterIndex].name;
+      }
+      
+      updatePlayersList(currentSession.players, currentSession.players[currentSession.masterIndex].id);
+      addLobbyMessage('Welcome to the game! Waiting for more players...');
+    }
+
+    function startGame() {
+      const question = document.getElementById('questionInput').value.trim();
+      const answer = document.getElementById('answerInput').value.trim();
+      
+      if (!question || !answer) {
+        showError('Please enter both question and answer');
+        return;
+      }
+
+      socket.emit('setQuestion', { sessionId: currentSession.sessionId, question, answer }, (response) => {
+        if (response.success) {
+          socket.emit('startGame', { sessionId: currentSession.sessionId }, (response) => {
+            if (!response.success) {
+              showError(response.error);
+            }
+          });
+        } else {
+          showError(response.error);
+        }
+      });
+    }
+
+    function submitGuess() {
+      const guess = document.getElementById('guessInput').value.trim();
+      
+      if (!guess) {
+        showError('Please enter your guess');
+        return;
+      }
+
+      socket.emit('submitGuess', { sessionId: currentSession.sessionId, guess }, (response) => {
+        if (response.success) {
+          document.getElementById('guessInput').value = '';
+          
+          if (response.correct) {
+            addGameMessage('🎉 Correct! You won!', 'winner');
+            document.getElementById('playerInput').classList.add('hidden');
+          } else {
+            addGameMessage(`❌ Incorrect. ${response.attemptsLeft} attempts left.`, 'error');
+            updateAttemptsDisplay(response.attemptsLeft);
+            
+            if (response.attemptsLeft === 0) {
+              document.getElementById('playerInput').classList.add('hidden');
+              addGameMessage('No attempts left. Waiting for other players...', 'system');
+            }
+          }
+        } else {
+          showError(response.error);
+        }
+      });
+    }
+
+    function updateAttemptsDisplay(attempts) {
+      const attemptsEl = document.getElementById('attemptsDisplay');
+      attemptsEl.textContent = `Attempts left: ${attempts}`;
+      attemptsEl.className = attempts <= 1 ? 'attempts-left low' : 'attempts-left';
+    }
+
+    function leaveSession() {
+      if (!currentSession) return;
+      
+      socket.emit('leaveSession', { sessionId: currentSession.sessionId }, (response) => {
+        if (response.success) {
+          currentSession = null;
+          myPlayerId = null;
+          showScreen('initialScreen');
+          document.getElementById('playerName').value = '';
+          document.getElementById('sessionIdInput').value = '';
+        }
+      });
+    }
+
+    // Socket event handlers
+    socket.on('connect', () => {
+      document.getElementById('statusText').textContent = 'Connected';
+      myPlayerId = socket.id;
+    });
+
+    socket.on('disconnect', () => {
+      document.getElementById('statusText').textContent = 'Disconnected';
+    });
+
+    socket.on('playerJoined', (data) => {
+      if (currentSession) {
+        currentSession.players = data.players;
+        updatePlayersList(data.players, data.currentMaster);
+        addLobbyMessage(`${data.player.name} joined the game`, 'system');
+      }
+    });
+
+    socket.on('playerLeft', (data) => {
+      if (currentSession) {
+        currentSession.players = data.players;
+        currentSession.masterIndex = currentSession.players.findIndex(p => p.id === data.currentMaster);
+        
+        if (currentSession.phase === 'lobby') {
+          updatePlayersList(data.players, data.currentMaster);
+          addLobbyMessage('A player left the game', 'system');
+          
+          // Update master controls if needed
+          const isMaster = data.currentMaster === myPlayerId;
+          if (isMaster) {
+            document.getElementById('masterControls').classList.remove('hidden');
+            document.getElementById('playerWaiting').classList.add('hidden');
+          } else {
+            document.getElementById('masterControls').classList.add('hidden');
+            document.getElementById('playerWaiting').classList.remove('hidden');
+            document.getElementById('masterName').textContent = currentSession.players[currentSession.masterIndex].name;
+          }
+        } else {
+          updatePlayersList(data.players, data.currentMaster, true);
+          addGameMessage('A player left the game', 'system');
+        }
+      }
+    });
+
+    socket.on('gameStarted', (data) => {
+      if (currentSession) {
+        currentSession.phase = 'playing';
+        currentSession.players = data.players;
+        
+        showScreen('gameScreen');
+        document.getElementById('gameSessionCode').textContent = currentSession.sessionId;
+        document.getElementById('gameQuestion').textContent = data.question;
+        
+        const isMaster = currentSession.players[currentSession.masterIndex].id === myPlayerId;
+        
+        if (isMaster) {
+          document.getElementById('masterView').classList.remove('hidden');
+          document.getElementById('playerInput').classList.add('hidden');
+        } else {
+          document.getElementById('masterView').classList.add('hidden');
+          document.getElementById('playerInput').classList.remove('hidden');
+          updateAttemptsDisplay(3);
+        }
+        
+        updatePlayersList(data.players, currentSession.players[currentSession.masterIndex].id, true);
+        addGameMessage('Game started! Good luck!', 'system');
+        
+        // Start countdown
+        let timeLeft = data.duration;
+        document.getElementById('timeRemaining').textContent = timeLeft;
+        
+        gameTimer = setInterval(() => {
+          timeLeft--;
+          document.getElementById('timeRemaining').textContent = timeLeft;
+          
+          if (timeLeft <= 0) {
+            clearInterval(gameTimer);
+          }
+        }, 1000);
+      }
+    });
+
+    socket.on('guessSubmitted', (data) => {
+      addGameMessage(`${data.playerName} made a guess (${data.attemptsLeft} attempts left)`, 'system');
+    });
+
+    socket.on('playerWon', (data) => {
+      if (currentSession) {
+        currentSession.phase = 'lobby';
+        currentSession.players = data.players;
+        
+        if (gameTimer) {
+          clearInterval(gameTimer);
+          gameTimer = null;
+        }
+        
+        const isWinner = data.winnerId === myPlayerId;
+        
+        if (isWinner) {
+          addGameMessage(`🎉 You won! The answer was: ${data.answer}`, 'winner');
+        } else {
+          addGameMessage(`${data.winnerName} won! The answer was: ${data.answer}`, 'winner');
+        }
+        
+        updatePlayersList(data.players, currentSession.players[currentSession.masterIndex].id, true);
+        
+        setTimeout(() => {
+          addGameMessage('Returning to lobby...', 'system');
+          setTimeout(() => showLobby(), 2000);
+        }, 3000);
+      }
+    });
+
+    socket.on('timeExpired', (data) => {
+      if (currentSession) {
+        currentSession.phase = 'lobby';
+        currentSession.players = data.players;
+        
+        if (gameTimer) {
+          clearInterval(gameTimer);
+          gameTimer = null;
+        }
+        
+        addGameMessage(`⏰ Time's up! The answer was: ${data.answer}`, 'system');
+        updatePlayersList(data.players, currentSession.players[currentSession.masterIndex].id, true);
+        
+        setTimeout(() => {
+          addGameMessage('Returning to lobby...', 'system');
+          setTimeout(() => showLobby(), 2000);
+        }, 3000);
+      }
+    });
+
+    socket.on('nextMaster', (data) => {
+      if (currentSession) {
+        currentSession.players = data.players;
+        currentSession.masterIndex = currentSession.players.findIndex(p => p.id === data.currentMaster);
+        addLobbyMessage(`${data.masterName} is now the Game Master!`, 'system');
+      }
+    });
+
+    socket.on('gameEnded', (data) => {
+      if (currentSession) {
+        currentSession.phase = 'lobby';
+        
+        if (gameTimer) {
+          clearInterval(gameTimer);
+          gameTimer = null;
+        }
+        
+        addGameMessage(`Game ended: ${data.reason}`, 'system');
+        
+        setTimeout(() => {
+          showLobby();
+        }, 2000);
+      }
+    });
+  </script>
+</body>
+</html>
