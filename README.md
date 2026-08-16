@@ -50,22 +50,14 @@ The game will be available at `http://localhost:3000`
 
 ## Deployment
 
-The app is ready to deploy to Heroku, Railway, or Render.
+### Deploy to Render (Free):
+1. Push your code to GitHub
+2. Go to [render.com](https://render.com)
+3. Create new "Web Service"
+4. Connect your GitHub repository
+5. Render auto-detects settings from `render.yaml` and deploys
 
-### Quick Deploy to Railway (Free):
-1. Push to GitHub
-2. Go to [railway.app](https://railway.app)
-3. Connect your repository
-4. Deploy automatically
-
-### Quick Deploy to Heroku:
-```bash
-heroku create your-app-name
-git push heroku main
-heroku open
-```
-
-The server uses `process.env.PORT` for dynamic port assignment.
+The app is ready to deploy with the included `render.yaml` configuration.
 
 ## Project Structure
 
@@ -81,9 +73,7 @@ guessHit/
 ├── package.json
 ├── .gitignore
 ├── .env.example
-├── Procfile              # Heroku config
-├── vercel.json           # Vercel config
-└── render.yaml           # Render config
+└── render.yaml           # Render deployment config
 ```
 
 ## Environment Variables
