@@ -1,0 +1,299 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  max-width: 800px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.header h1 {
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+
+.header p {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.lobby-screen, .game-screen {
+  padding: 20px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #333;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+button {
+  flex: 1;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #e0e0e0;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.info-box {
+  background: #f9fafb;
+  border-left: 4px solid #667eea;
+  padding: 12px;
+  margin: 15px 0;
+  border-radius: 4px;
+}
+
+.info-box.success {
+  border-left-color: #10b981;
+  background: #f0fdf4;
+}
+
+.info-box.error {
+  border-left-color: #ef4444;
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.info-box.warning {
+  border-left-color: #f59e0b;
+  background: #fffbeb;
+}
+
+.players-list {
+  background: #f9fafb;
+  border-radius: 6px;
+  padding: 15px;
+  margin: 15px 0;
+}
+
+.players-list h3 {
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 16px;
+}
+
+.player-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background: white;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  border: 2px solid transparent;
+}
+
+.player-item.master {
+  border-color: #667eea;
+  background: #eef2ff;
+}
+
+.player-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.player-score {
+  background: #667eea;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.master-badge {
+  background: #fbbf24;
+  color: #78350f;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+
+.chat-area {
+  background: #f9fafb;
+  border-radius: 6px;
+  padding: 15px;
+  margin: 15px 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.chat-message {
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  background: white;
+  border-left: 3px solid #667eea;
+}
+
+.chat-message.system {
+  border-left-color: #10b981;
+  background: #f0fdf4;
+  font-style: italic;
+}
+
+.chat-message.error {
+  border-left-color: #ef4444;
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.chat-message.winner {
+  border-left-color: #fbbf24;
+  background: #fffbeb;
+  font-weight: 600;
+}
+
+.game-question {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 15px 0;
+  text-align: center;
+}
+
+.game-question h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.game-question p {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.timer {
+  background: #fbbf24;
+  color: #78350f;
+  padding: 8px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  font-weight: 600;
+  margin: 10px 0;
+}
+
+.attempts-left {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin: 10px 0;
+}
+
+.attempts-left.low {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.session-code {
+  background: #f3f4f6;
+  padding: 15px;
+  border-radius: 6px;
+  text-align: center;
+  margin: 15px 0;
+}
+
+.session-code h3 {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.session-code .code {
+  font-size: 32px;
+  font-weight: 700;
+  color: #667eea;
+  letter-spacing: 4px;
+  font-family: 'Courier New', monospace;
+}

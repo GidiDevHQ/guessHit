@@ -14,12 +14,12 @@ app.get('/favicon.ico', (req, res) => {
 
 const sessions = {};
 
-function generateSessionId() {
+function generateSessionId(){
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjklmnpqrstuvwxyz0123456789';
   let sessionId = '';
   for (let i = 0; i < 4; i++) {
     sessionId += chars[Math.floor(Math.random() * chars.length)];
-  }
+  } 
   return sessionId;
 }
 

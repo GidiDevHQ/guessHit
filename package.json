@@ -1,18 +1,39 @@
 {
-  "name": "guessing-game",
+  "name": "guess-hit",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+  "description": "A fun, real-time multiplayer guessing game where players take turns being the Game Master and creating questions for others to guess.",
+  "keywords": [
+    "game",
+    "multiplayer",
+    "guessing-game",
+    "websocket",
+    "socket.io",
+    "real-time"
+  ],
+  "homepage": "https://github.com/GidiDevHQ/guessHit#readme",
+  "bugs": {
+    "url": "https://github.com/GidiDevHQ/guessHit/issues"
   },
-  "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GidiDevHQ/guessHit.git"
+  },
   "license": "ISC",
+  "author": "",
   "type": "commonjs",
+  "main": "server.js",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "express": "^5.2.1",
     "socket.io": "^4.8.3"
-  }
+  },
+  "devDependencies": {}
 }
